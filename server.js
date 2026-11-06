@@ -4,6 +4,7 @@ const fs = require('fs');
 const path = require('path');
 
 const app = express();
+
 // Ruta de la carpeta donde se guardarán los expedientes
 const carpetaExpedientes = path.join(__dirname, 'data', 'expedientes');
 
@@ -13,26 +14,55 @@ app.use(express.json());
 // Puerto del servidor
 const PORT = 4000;
 
+// Obtener la lista de expedientes desde los archivos JSON
+function obtenerExpedientes() {
+    const archivos = fs.readdirSync(carpetaExpedientes);
+
+    return archivos
+        .filter(archivo => archivo.endsWith('.json'))
+        .map(archivo => {
+            const contenido = fs.readFileSync(
+                path.join(carpetaExpedientes, archivo),
+                'utf8'
+            );
+
+            return JSON.parse(contenido);
+        });
+}
+
+// Ruta principal
 app.get('/', (req, res) => {
     res.send('Servidor SIGO-GN funcionando correctamente');
+});
+
+// Buscar expedientes por folio, operativo o descripción
+// IMPORTANTE: Esta ruta debe ir antes de /expedientes/:folio
+app.get('/expedientes/buscar', (req, res) => {
+    try {
+        const texto = (req.query.texto || '').toLowerCase();
+
+        const expedientes = obtenerExpedientes();
+
+        const resultados = expedientes.filter(expediente =>
+            expediente.folio.toLowerCase().includes(texto) ||
+            expediente.operativo.toLowerCase().includes(texto) ||
+            expediente.descripcion.toLowerCase().includes(texto)
+        );
+
+        res.json(resultados);
+
+    } catch (error) {
+        console.error('Error al buscar expedientes:', error);
+        res.status(500).json({
+            mensaje: 'Error al buscar expedientes'
+        });
+    }
 });
 
 // Obtener todos los expedientes
 app.get('/expedientes', (req, res) => {
     try {
-        const archivos = fs.readdirSync(carpetaExpedientes);
-
-        const expedientes = archivos
-            .filter(archivo => archivo.endsWith('.json'))
-            .map(archivo => {
-                const contenido = fs.readFileSync(
-                    path.join(carpetaExpedientes, archivo),
-                    'utf8'
-                );
-
-                return JSON.parse(contenido);
-            });
-
+        const expedientes = obtenerExpedientes();
         res.json(expedientes);
 
     } catch (error) {
@@ -43,14 +73,31 @@ app.get('/expedientes', (req, res) => {
     }
 });
 
-
- // Crear un expediente nuevo
+// Crear un expediente nuevo
 app.post('/expedientes', (req, res) => {
     try {
-        const { folio, operativo, tipoIncidente, zona, fecha, descripcion } = req.body;
+        const {
+            folio,
+            operativo,
+            tipoIncidente,
+            zona,
+            fecha,
+            descripcion,
+            estatus,
+            prioridad
+        } = req.body;
 
         // Validar que todos los campos estén completos
-        if (!folio || !operativo || !tipoIncidente || !zona || !fecha || !descripcion) {
+        if (
+            !folio ||
+            !operativo ||
+            !tipoIncidente ||
+            !zona ||
+            !fecha ||
+            !descripcion ||
+            !estatus ||
+            !prioridad
+        ) {
             return res.status(400).json({
                 mensaje: 'Todos los campos son obligatorios'
             });
@@ -65,6 +112,24 @@ app.post('/expedientes', (req, res) => {
             });
         }
 
+        // Validar estatus
+        const estatusPermitidos = ['Abierto', 'En proceso', 'Cerrado'];
+
+        if (!estatusPermitidos.includes(estatus)) {
+            return res.status(400).json({
+                mensaje: 'Estatus no válido'
+            });
+        }
+
+        // Validar prioridad
+        const prioridadesPermitidas = ['Alta', 'Media', 'Baja'];
+
+        if (!prioridadesPermitidas.includes(prioridad)) {
+            return res.status(400).json({
+                mensaje: 'Prioridad no válida'
+            });
+        }
+
         // Crear el nombre y la ruta del archivo
         const nombreArchivo = `${folio}.json`;
         const rutaArchivo = path.join(carpetaExpedientes, nombreArchivo);
@@ -76,16 +141,24 @@ app.post('/expedientes', (req, res) => {
             });
         }
 
-        // Guardar el expediente en formato JSON
+        // Obtener fecha y hora actual
+        const fechaActual = new Date().toISOString();
+
+        // Crear expediente
         const nuevoExpediente = {
             folio,
             operativo,
             tipoIncidente,
             zona,
             fecha,
-            descripcion
+            descripcion,
+            estatus,
+            prioridad,
+            fechaCreacion: fechaActual,
+            fechaModificacion: fechaActual
         };
 
+        // Guardar expediente en archivo JSON
         fs.writeFileSync(
             rutaArchivo,
             JSON.stringify(nuevoExpediente, null, 2),
@@ -105,8 +178,7 @@ app.post('/expedientes', (req, res) => {
     }
 });
 
-
- // Obtener un expediente por su folio
+// Obtener un expediente por su folio
 app.get('/expedientes/:folio', (req, res) => {
     try {
         const folio = req.params.folio;
@@ -131,8 +203,7 @@ app.get('/expedientes/:folio', (req, res) => {
     }
 });
 
-
- // Actualizar un expediente
+// Actualizar un expediente
 app.put('/expedientes/:folio', (req, res) => {
     try {
         const folio = req.params.folio;
@@ -144,23 +215,68 @@ app.put('/expedientes/:folio', (req, res) => {
             });
         }
 
-        const { operativo, tipoIncidente, zona, fecha, descripcion } = req.body;
+        const {
+            operativo,
+            tipoIncidente,
+            zona,
+            fecha,
+            descripcion,
+            estatus,
+            prioridad
+        } = req.body;
 
-        if (!operativo || !tipoIncidente || !zona || !fecha || !descripcion) {
+        // Validar campos obligatorios
+        if (
+            !operativo ||
+            !tipoIncidente ||
+            !zona ||
+            !fecha ||
+            !descripcion ||
+            !estatus ||
+            !prioridad
+        ) {
             return res.status(400).json({
                 mensaje: 'Todos los campos son obligatorios'
             });
         }
 
+        // Validar estatus
+        const estatusPermitidos = ['Abierto', 'En proceso', 'Cerrado'];
+
+        if (!estatusPermitidos.includes(estatus)) {
+            return res.status(400).json({
+                mensaje: 'Estatus no válido'
+            });
+        }
+
+        // Validar prioridad
+        const prioridadesPermitidas = ['Alta', 'Media', 'Baja'];
+
+        if (!prioridadesPermitidas.includes(prioridad)) {
+            return res.status(400).json({
+                mensaje: 'Prioridad no válida'
+            });
+        }
+
+        // Leer expediente actual para conservar su fecha de creación
+        const contenidoActual = fs.readFileSync(rutaArchivo, 'utf8');
+        const expedienteAnterior = JSON.parse(contenidoActual);
+
+        // Crear expediente actualizado
         const expedienteActualizado = {
             folio,
             operativo,
             tipoIncidente,
             zona,
             fecha,
-            descripcion
+            descripcion,
+            estatus,
+            prioridad,
+            fechaCreacion: expedienteAnterior.fechaCreacion || new Date().toISOString(),
+            fechaModificacion: new Date().toISOString()
         };
 
+        // Guardar cambios en el archivo JSON
         fs.writeFileSync(
             rutaArchivo,
             JSON.stringify(expedienteActualizado, null, 2),
@@ -180,8 +296,7 @@ app.put('/expedientes/:folio', (req, res) => {
     }
 });
 
-
- // Eliminar un expediente
+// Eliminar un expediente
 app.delete('/expedientes/:folio', (req, res) => {
     try {
         const folio = req.params.folio;
@@ -193,6 +308,7 @@ app.delete('/expedientes/:folio', (req, res) => {
             });
         }
 
+        // Eliminar físicamente el archivo JSON
         fs.unlinkSync(rutaArchivo);
 
         res.json({
@@ -207,7 +323,7 @@ app.delete('/expedientes/:folio', (req, res) => {
     }
 });
 
-
+// Iniciar servidor
 app.listen(PORT, () => {
     console.log(`Servidor escuchando en http://localhost:${PORT}`);
 });
