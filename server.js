@@ -14,6 +14,30 @@ app.use(express.json());
 // Puerto del servidor
 const PORT = 4000;
 
+const permisosPorRol = {
+    Comandante: 7,
+    Oficial: 6,
+    Analista: 4
+};
+
+function tienePermiso(rolUsuario, accionRequerida) {
+    const permisos = permisosPorRol[rolUsuario] || 0;
+    return (permisos & accionRequerida) === accionRequerida;
+}
+
+function validarPermiso(req, res, accionRequerida) {
+    const rolUsuario = req.get('x-rol');
+
+    if (!tienePermiso(rolUsuario, accionRequerida)) {
+        res.status(403).json({
+            mensaje: '403 Prohibido: tu rol no tiene permiso para realizar esta acción.'
+        });
+        return false;
+    }
+
+    return true;
+}
+
 // Obtener la lista de expedientes desde los archivos JSON
 function obtenerExpedientes() {
     const archivos = fs.readdirSync(carpetaExpedientes);
@@ -75,6 +99,8 @@ app.get('/expedientes', (req, res) => {
 
 // Crear un expediente nuevo
 app.post('/expedientes', (req, res) => {
+    if (!validarPermiso(req, res, 2)) return;
+
     try {
         const {
             folio,
@@ -205,6 +231,8 @@ app.get('/expedientes/:folio', (req, res) => {
 
 // Actualizar un expediente
 app.put('/expedientes/:folio', (req, res) => {
+    if (!validarPermiso(req, res, 2)) return;
+
     try {
         const folio = req.params.folio;
         const rutaArchivo = path.join(carpetaExpedientes, `${folio}.json`);
@@ -298,6 +326,8 @@ app.put('/expedientes/:folio', (req, res) => {
 
 // Eliminar un expediente
 app.delete('/expedientes/:folio', (req, res) => {
+    if (!validarPermiso(req, res, 1)) return;
+
     try {
         const folio = req.params.folio;
         const rutaArchivo = path.join(carpetaExpedientes, `${folio}.json`);
