@@ -1,8 +1,12 @@
 {
   "folio": "EXP-2026600326-002",
-  "operativo": "BETA",
-  "tipoIncidente": "VANDALISMO",
-  "zona": "ORIENTE",
-  "fecha": "2026-10-10",
-  "descripcion": "PAREDES VANDALIZADAS EN PLAZA COMERCIAL."
+  "operativo": "AGUILA",
+  "tipoIncidente": "ACCIDENTE",
+  "zona": "CENTRO",
+  "fecha": "2026-10-21",
+  "descripcion": "ACCIDENTE VEHICULAR.",
+  "estatus": "En proceso",
+  "prioridad": "Media",
+  "fechaCreacion": "2026-10-21T09:30:00.000Z",
+  "fechaModificacion": "2026-10-22T10:00:00.000Z"
 }

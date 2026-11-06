@@ -1,0 +1,12 @@
+{
+  "folio": "EXP-2026600326-015",
+  "operativo": "APOLO",
+  "tipoIncidente": "INCENDIO",
+  "zona": "PONIENTE",
+  "fecha": "2026-11-03",
+  "descripcion": "CONATO DE INCENDIO EN VIVIENDA.",
+  "estatus": "Cerrado",
+  "prioridad": "Media",
+  "fechaCreacion": "2026-11-03T12:00:00.000Z",
+  "fechaModificacion": "2026-11-04T12:00:00.000Z"
+}

@@ -4,5 +4,9 @@
   "tipoIncidente": "ROBO",
   "zona": "NORTE",
   "fecha": "2026-11-04",
-  "descripcion": "ROBO DE VEHÍCULO."
+  "descripcion": "ROBO DE VEHÍCULO.",
+  "estatus": "Abierto",
+  "prioridad": "Alta",
+  "fechaCreacion": "2026-11-04T08:00:00.000Z",
+  "fechaModificacion": "2026-11-04T08:00:00.000Z"
 }

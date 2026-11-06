@@ -1,8 +1,12 @@
 {
   "folio": "EXP-2026600326-003",
-  "operativo": "CHARLIE",
-  "tipoIncidente": "ALLANAMIENTO",
-  "zona": "PONIENTE",
-  "fecha": "2026-11-01",
-  "descripcion": "ALLANAMIENTO DE MORADA CON USO DE FUERZA."
+  "operativo": "HORIZONTE",
+  "tipoIncidente": "INCENDIO",
+  "zona": "SUR",
+  "fecha": "2026-10-22",
+  "descripcion": "INCENDIO EN ESTABLECIMIENTO.",
+  "estatus": "Cerrado",
+  "prioridad": "Alta",
+  "fechaCreacion": "2026-10-22T11:00:00.000Z",
+  "fechaModificacion": "2026-10-23T12:00:00.000Z"
 }

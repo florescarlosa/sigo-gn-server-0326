@@ -1,8 +1,12 @@
 {
   "folio": "EXP-2026600326-001",
-  "operativo": "ALPHA",
-  "tipoIncidente": "INCENDIO",
-  "zona": "SUR",
-  "fecha": "2026-10-01",
-  "descripcion": "EDIFICIO INTERVENIDO POR LAS LLAMAS."
+  "operativo": "CENTINELA",
+  "tipoIncidente": "ROBO",
+  "zona": "NORTE",
+  "fecha": "2026-10-20",
+  "descripcion": "ROBO A CASA HABITACIÓN.",
+  "estatus": "Abierto",
+  "prioridad": "Alta",
+  "fechaCreacion": "2026-10-20T08:00:00.000Z",
+  "fechaModificacion": "2026-10-20T08:00:00.000Z"
 }

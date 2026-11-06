@@ -1,0 +1,12 @@
+{
+  "folio": "EXP-2026600326-014",
+  "operativo": "ATLAS",
+  "tipoIncidente": "ROBO",
+  "zona": "NORTE",
+  "fecha": "2026-11-02",
+  "descripcion": "ROBO A TRANSEÚNTE.",
+  "estatus": "En proceso",
+  "prioridad": "Media",
+  "fechaCreacion": "2026-11-02T11:00:00.000Z",
+  "fechaModificacion": "2026-11-03T11:00:00.000Z"
+}

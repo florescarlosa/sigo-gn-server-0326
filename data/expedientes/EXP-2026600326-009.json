@@ -1,0 +1,12 @@
+{
+  "folio": "EXP-2026600326-009",
+  "operativo": "FENIX",
+  "tipoIncidente": "INCENDIO",
+  "zona": "CENTRO",
+  "fecha": "2026-10-28",
+  "descripcion": "INCENDIO EN LOCAL COMERCIAL.",
+  "estatus": "Cerrado",
+  "prioridad": "Media",
+  "fechaCreacion": "2026-10-28T11:00:00.000Z",
+  "fechaModificacion": "2026-10-29T11:00:00.000Z"
+}

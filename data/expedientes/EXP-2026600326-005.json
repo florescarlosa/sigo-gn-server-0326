@@ -1,8 +1,12 @@
 {
   "folio": "EXP-2026600326-005",
-  "operativo": "GAMMA",
-  "tipoIncidente": "ACCIDENTE",
-  "zona": "CENTRO",
-  "fecha": "2026-09-09",
-  "descripcion": "ACCIDENTE EN CENTRO DE CARGA Y DESCARGA."
+  "operativo": "FRONTERA",
+  "tipoIncidente": "ALLANAMIENTO",
+  "zona": "PONIENTE",
+  "fecha": "2026-10-24",
+  "descripcion": "ALLANAMIENTO DE DOMICILIO.",
+  "estatus": "En proceso",
+  "prioridad": "Baja",
+  "fechaCreacion": "2026-10-24T13:00:00.000Z",
+  "fechaModificacion": "2026-10-25T14:00:00.000Z"
 }

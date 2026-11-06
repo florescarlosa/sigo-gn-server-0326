@@ -1,0 +1,12 @@
+{
+  "folio": "EXP-2026600326-007",
+  "operativo": "ALFA",
+  "tipoIncidente": "ROBO",
+  "zona": "SUR",
+  "fecha": "2026-10-26",
+  "descripcion": "ROBO A COMERCIO.",
+  "estatus": "Abierto",
+  "prioridad": "Media",
+  "fechaCreacion": "2026-10-26T09:00:00.000Z",
+  "fechaModificacion": "2026-10-26T09:00:00.000Z"
+}
